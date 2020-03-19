@@ -1,4 +1,4 @@
-module github.com/andrestc/docker-machine-driver-cloudstack
+module github.com/sergiomacedo/docker-machine-driver-cloudstack
 
 go 1.13
 

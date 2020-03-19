@@ -451,6 +451,7 @@ func (d *Driver) Create() error {
 	if d.NetworkType == "Basic" {
 		d.PublicIP = d.PrivateIP
 	}
+	d.IPAddress = map[bool]string{true: d.PrivateIP, false: d.PublicIP}[d.UsePrivateIP]
 	if d.NetworkType == "Advanced" && !d.UsePrivateIP {
 		if d.PublicIPID == "" {
 			if err := d.associatePublicIP(); err != nil {
@@ -729,6 +730,8 @@ func (d *Driver) setNetwork(networkName string, networkID string) error {
 
 	if networkID != "" {
 		networkIDs := strings.Split(networkID, ",")
+		networkIDsResult = make([]string, 0)
+		networkNamesResult = make([]string, 0)
 		for _, value := range networkIDs {
 			network, _, err = cs.Network.GetNetworkByID(value, d.setParams)
 			if err != nil {
@@ -739,6 +742,8 @@ func (d *Driver) setNetwork(networkName string, networkID string) error {
 		}
 	} else {
 		networkNames := strings.Split(networkName, ",")
+		networkIDsResult = make([]string, 0)
+		networkNamesResult = make([]string, 0)
 		for _, value := range networkNames {
 			network, _, err = cs.Network.GetNetworkByName(value, d.setParams)
 			if err != nil {
@@ -992,6 +997,7 @@ func (d *Driver) associatePublicIP() error {
 		return err
 	}
 	d.PublicIP = ip.Ipaddress
+	d.IPAddress = d.PublicIP
 	d.PublicIPID = ip.Id
 	d.DisassociatePublicIP = true
 
