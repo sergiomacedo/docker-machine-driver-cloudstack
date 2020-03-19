@@ -1,5 +1,4 @@
 .PHONY: build test release clean
-PATH=$PATH:$HOME/go/bin
 
 GITHUB_USER := sergiomacedo
 VERSION := $(shell grep -w Version version.go | awk '{print $$5}' | sed 's/"//g')
